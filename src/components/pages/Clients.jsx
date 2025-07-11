@@ -197,11 +197,10 @@ if (clients.length === 0) {
                     <span className="truncate">{client.email}</span>
                   </div>
                   
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+<div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <ApperIcon name="Calendar" size={14} />
-<span>Client since {new Date(client.createdAt).toLocaleDateString()}</span>
+                    <span>Client since {new Date(client.createdAt || client.CreatedOn).toLocaleDateString()}</span>
                   </div>
-                  
                   {/* Project Statistics */}
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <ApperIcon name="FolderOpen" size={14} />

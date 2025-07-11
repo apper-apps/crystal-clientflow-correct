@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Badge from "@/components/atoms/Badge";
 import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
-import Badge from "@/components/atoms/Badge";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
-import ApperIcon from "@/components/ApperIcon";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import Projects from "@/components/pages/Projects";
 import ClientModal from "@/components/molecules/ClientModal";
-import { getClientById } from "@/services/api/clientService";
 import { getAllProjects } from "@/services/api/projectService";
+import { getClientById } from "@/services/api/clientService";
 
 const ClientDetail = () => {
   const { id } = useParams();
@@ -180,7 +181,7 @@ const ClientDetail = () => {
                 </div>
               </div>
               
-              <div className="space-y-3">
+<div className="space-y-3">
                 <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
                   <ApperIcon name="Mail" size={16} />
                   <span>{client.email}</span>
@@ -188,7 +189,7 @@ const ClientDetail = () => {
                 
                 <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
                   <ApperIcon name="Calendar" size={16} />
-                  <span>Client since {new Date(client.createdAt).toLocaleDateString()}</span>
+                  <span>Client since {new Date(client.createdAt || client.CreatedOn).toLocaleDateString()}</span>
                 </div>
               </div>
               

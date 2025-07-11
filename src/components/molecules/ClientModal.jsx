@@ -87,11 +87,23 @@ setLoading(true);
     
     try {
       if (mode === "edit") {
-        const updatedClient = await updateClient(client.Id, formData);
+        const updatedClient = await updateClient(client.Id, {
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          notes: formData.notes,
+          status: formData.status
+        });
         toast.success("Client updated successfully!");
         onClientUpdated?.(updatedClient);
       } else {
-        const newClient = await createClient(formData);
+        const newClient = await createClient({
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          notes: formData.notes,
+          status: formData.status
+        });
         toast.success("Client created successfully!");
         onClientCreated?.(newClient);
       }
@@ -108,7 +120,7 @@ setLoading(true);
       
       onClose();
     } catch (error) {
-      toast.error(mode === "edit" ? "Failed to update client. Please try again." : "Failed to create client. Please try again.");
+      toast.error(error.message || (mode === "edit" ? "Failed to update client. Please try again." : "Failed to create client. Please try again."));
     } finally {
       setLoading(false);
     }

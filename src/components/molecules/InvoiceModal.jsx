@@ -101,9 +101,9 @@ setFormData({
     return formData.lineItems.reduce((total, item) => total + (item.amount || 0), 0);
   };
 
-  const getProjectName = (projectId) => {
+const getProjectName = (projectId) => {
     const project = projects.find(p => p.Id === parseInt(projectId));
-    return project ? project.name : 'Unknown Project';
+    return project ? (project.Name || project.name) : 'Unknown Project';
   };
 
   const getProjectClientId = (projectId) => {
@@ -164,7 +164,7 @@ try {
       const invoiceData = {
         projectId: parseInt(formData.projectId),
         clientId: getProjectClientId(formData.projectId),
-        dueDate: new Date(formData.dueDate).toISOString(),
+        dueDate: formData.dueDate,
         status: formData.status,
         amount: total,
         lineItems: formData.lineItems.filter(item => 
@@ -174,14 +174,14 @@ try {
 
       // Add payment date if status is paid
       if (formData.status === 'paid' && formData.paymentDate) {
-        invoiceData.paymentDate = new Date(formData.paymentDate).toISOString();
+        invoiceData.paymentDate = formData.paymentDate;
       }
 
       await onSubmit(invoiceData);
       onClose();
       toast.success(initialData ? "Invoice updated successfully!" : "Invoice created successfully!");
     } catch (error) {
-      toast.error("Failed to save invoice. Please try again.");
+      toast.error(error.message || "Failed to save invoice. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -208,9 +208,9 @@ try {
             disabled={loadingProjects}
           >
             <option value="">Select a project</option>
-            {projects.map(project => (
+{projects.map(project => (
               <option key={project.Id} value={project.Id}>
-                {project.name} - Client ID: {project.clientId}
+                {project.Name || project.name} - Client ID: {project.clientId}
               </option>
             ))}
           </select>

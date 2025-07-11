@@ -78,7 +78,7 @@ const handleProjectSubmit = async (projectData) => {
   };
 const getClientName = (clientId) => {
     const client = clients.find(c => c.Id === parseInt(clientId));
-    return client ? client.name : `Client ${clientId}`;
+    return client ? (client.Name || client.name) : `Client ${clientId}`;
   };
   const filteredProjects = projects.filter(project => {
     const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase());
