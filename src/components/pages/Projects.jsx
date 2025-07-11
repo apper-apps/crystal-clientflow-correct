@@ -75,12 +75,10 @@ const [isModalOpen, setIsModalOpen] = useState(false);
     setIsModalOpen(false);
     setEditingProject(null);
   };
-
 const getClientName = (clientId) => {
-    const client = clients.find(c => c.Id === clientId);
-    return client ? client.name : `Client ID: ${clientId}`;
+    const client = clients.find(c => c.Id === parseInt(clientId));
+    return client ? client.name : `Client ${clientId}`;
   };
-
   const filteredProjects = projects.filter(project => {
     const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || project.status === statusFilter;
@@ -219,8 +217,9 @@ actionLabel="Create Project"
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-gray-900 dark:text-white truncate mb-1">
                     {project.name}
-                  </h3>
-<p className="text-sm text-gray-600 dark:text-gray-400">
+</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <ApperIcon name="User" size={12} className="inline mr-1" />
                     {getClientName(project.clientId)}
                   </p>
                 </div>

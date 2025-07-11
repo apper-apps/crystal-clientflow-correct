@@ -12,27 +12,44 @@ import Empty from "@/components/ui/Empty";
 import ApperIcon from "@/components/ApperIcon";
 import ClientModal from "@/components/molecules/ClientModal";
 import { getAllClients } from "@/services/api/clientService";
+import { getAllProjects } from "@/services/api/projectService";
 
 const Clients = () => {
   const navigate = useNavigate();
   const [clients, setClients] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
+  
   const loadClients = async () => {
     try {
       setLoading(true);
       setError("");
-      const clientData = await getAllClients();
+      const [clientData, projectData] = await Promise.all([
+        getAllClients(),
+        getAllProjects()
+      ]);
       setClients(clientData);
+      setProjects(projectData);
     } catch (err) {
       setError("Failed to load clients. Please try again.");
       toast.error("Failed to load clients");
     } finally {
       setLoading(false);
     }
-};
+  };
+
+  // Calculate project statistics for a client
+  const calculateProjectStats = (clientId) => {
+    const clientProjects = projects.filter(project => 
+      parseInt(project.clientId) === parseInt(clientId)
+    );
+    const activeProjects = clientProjects.filter(p => p.status === "active").length;
+    const totalProjects = clientProjects.length;
+    return { activeProjects, totalProjects };
+  };
 
   const handleClientCreated = (newClient) => {
     setClients(prev => [...prev, newClient]);
@@ -182,12 +199,25 @@ if (clients.length === 0) {
                   
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <ApperIcon name="Calendar" size={14} />
-                    <span>Client since {new Date(client.createdAt).toLocaleDateString()}</span>
+<span>Client since {new Date(client.createdAt).toLocaleDateString()}</span>
+                  </div>
+                  
+                  {/* Project Statistics */}
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <ApperIcon name="FolderOpen" size={14} />
+                    <span>
+                      {(() => {
+                        const stats = calculateProjectStats(client.Id);
+                        return stats.totalProjects === 0 
+                          ? "No projects" 
+                          : `${stats.activeProjects} active, ${stats.totalProjects} total`;
+                      })()}
+                    </span>
                   </div>
                 </div>
                 
-<div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <Button 
+                <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <Button
                     variant="outline" 
                     size="sm"
                     onClick={(e) => {
@@ -197,9 +227,20 @@ if (clients.length === 0) {
                   >
                     <ApperIcon name="MessageSquare" size={14} className="mr-2" />
                     Contact
-                  </Button>
+</Button>
                   
                   <div className="flex items-center gap-2">
+                    {(() => {
+                      const stats = calculateProjectStats(client.Id);
+                      return stats.totalProjects > 0 && (
+                        <div className="flex items-center gap-1 text-xs">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <span className="text-gray-600 dark:text-gray-400">
+                            {stats.activeProjects} active
+                          </span>
+                        </div>
+                      );
+                    })()}
                     <Button 
                       variant="ghost" 
                       size="sm"

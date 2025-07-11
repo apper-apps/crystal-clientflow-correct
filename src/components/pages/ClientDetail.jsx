@@ -273,8 +273,8 @@ const ClientDetail = () => {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
               Projects ({projects.length})
-            </h2>
-<Button 
+</h2>
+            <Button 
               variant="outline" 
               size="sm"
               onClick={() => navigate(`/projects?clientId=${client.Id}`)}
@@ -290,7 +290,7 @@ const ClientDetail = () => {
               description="This client doesn't have any projects yet. Create the first project to get started."
               icon="FolderOpen"
               actionLabel="Create Project"
-              onAction={() => {/* TODO: Navigate to create project */}}
+onAction={() => navigate(`/projects?clientId=${client.Id}`)}
             />
           ) : (
             <div className="space-y-4">
@@ -324,6 +324,17 @@ const ClientDetail = () => {
                     <Badge variant={getStatusVariant(project.status)}>
                       {project.status}
                     </Badge>
+</div>
+                  
+                  <div className="flex items-center gap-2 mt-2">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => navigate(`/projects/${project.Id}`)}
+                    >
+                      <ApperIcon name="Eye" size={14} className="mr-1" />
+                      View
+                    </Button>
                   </div>
                 </motion.div>
               ))}
