@@ -1,19 +1,29 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import Card from "@/components/atoms/Card";
 import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
 import ProjectModal from "@/components/molecules/ProjectModal";
 import ClientModal from "@/components/molecules/ClientModal";
 import InvoiceModal from "@/components/molecules/InvoiceModal";
+import { createProject } from "@/services/api/projectService";
+
 const QuickActions = () => {
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isClientModalOpen, setIsClientModalOpen] = useState(false);
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
 
   const handleProjectSubmit = async (projectData) => {
-    // Modal handles the submission and toast notifications
-    setIsProjectModalOpen(false);
+    try {
+      await createProject(projectData);
+      setIsProjectModalOpen(false);
+      toast.success("Project created successfully");
+    } catch (error) {
+      console.error("Failed to create project:", error);
+      toast.error("Failed to create project");
+      throw error;
+    }
   };
 
   const handleClientCreated = (newClient) => {
