@@ -73,9 +73,8 @@ const Clients = () => {
     return <Loading />;
   }
 
-  if (error) {
+if (error) {
     return <Error message={error} onRetry={loadClients} />;
-return <Error message={error} onRetry={loadClients} />;
   }
 
   return (
