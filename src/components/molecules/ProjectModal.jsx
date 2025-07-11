@@ -164,161 +164,166 @@ const getClientName = (clientId) => {
       title={title}
       size="lg"
     >
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Project Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Project Name *
-          </label>
-          <Input
-            name="name"
-            type="text"
-            value={formData.name}
-            onChange={handleInputChange}
-            placeholder="Enter project name"
-            error={errors.name}
-            required
-          />
-        </div>
-
-        {/* Description */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Description
-          </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            placeholder="Enter project description"
-            rows={4}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg 
-                     focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                     bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                     placeholder-gray-500 dark:placeholder-gray-400 resize-none"
-          />
-        </div>
-
-        {/* Client Selection */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Client *
-          </label>
-          {loadingClients ? (
-            <div className="animate-pulse bg-gray-200 dark:bg-gray-700 h-12 rounded-lg"></div>
-          ) : (
-            <select
-              name="clientId"
-              value={formData.clientId}
-              onChange={handleInputChange}
-              className={`w-full px-4 py-3 border rounded-lg 
-                        focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                        bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                        ${errors.clientId ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
-              required
-            >
-<option value="">Select a client</option>
-              {clients.map(client => (
-                <option key={client.Id} value={client.Id}>
-                  {client.name}
-                </option>
-              ))}
-            </select>
-          )}
-          {errors.clientId && (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.clientId}</p>
-          )}
-        </div>
-
-        {/* Status and Budget Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Status */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Status
+<div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Project Name */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Project Name *
             </label>
-            <select
-              name="status"
-              value={formData.status}
+            <Input
+              name="name"
+              type="text"
+              value={formData.name}
               onChange={handleInputChange}
+              placeholder="Enter project name"
+              error={errors.name}
+              required
+            />
+          </div>
+
+          {/* Description */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Description
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="Enter project description"
+              rows={4}
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg 
                        focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                       bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              {statusOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Budget */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Budget
-            </label>
-            <Input
-              name="budget"
-              type="number"
-              value={formData.budget}
-              onChange={handleInputChange}
-              placeholder="0.00"
-              error={errors.budget}
-              min="0"
-              step="0.01"
-            />
-          </div>
-        </div>
-
-        {/* Date Range */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Start Date */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Start Date
-            </label>
-            <Input
-              name="startDate"
-              type="date"
-              value={formData.startDate}
-              onChange={handleInputChange}
+                       bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                       placeholder-gray-500 dark:placeholder-gray-400 resize-none"
             />
           </div>
 
-          {/* End Date */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              End Date
+          {/* Client Selection */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Client *
             </label>
-            <Input
-              name="endDate"
-              type="date"
-              value={formData.endDate}
-              onChange={handleInputChange}
-              error={errors.endDate}
-              min={formData.startDate}
-            />
+            {loadingClients ? (
+              <div className="animate-pulse bg-gray-200 dark:bg-gray-700 h-12 rounded-lg"></div>
+            ) : (
+              <select
+                name="clientId"
+                value={formData.clientId}
+                onChange={handleInputChange}
+                className={`w-full px-4 py-3 border rounded-lg 
+                          focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                          bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                          ${errors.clientId ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
+                required
+              >
+                <option value="">Select a client</option>
+                {clients.map(client => (
+                  <option key={client.Id} value={client.Id}>
+                    {client.name}
+                  </option>
+                ))}
+              </select>
+            )}
+            {errors.clientId && (
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.clientId}</p>
+            )}
           </div>
-        </div>
 
-        {/* Preview Selected Client */}
-        {formData.clientId && (
-          <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Selected Client
-            </h4>
-            <p className="text-gray-900 dark:text-white">{getClientName(formData.clientId)}</p>
+          {/* Status and Budget Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Status */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Status
+              </label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg 
+                         focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                         bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              >
+                {statusOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Budget */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Budget
+              </label>
+              <Input
+                name="budget"
+                type="number"
+                value={formData.budget}
+                onChange={handleInputChange}
+                placeholder="0.00"
+                error={errors.budget}
+                min="0"
+                step="0.01"
+              />
+            </div>
           </div>
-        )}
 
-        {/* Form Actions */}
-        <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+          {/* Date Range */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Start Date */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Start Date
+              </label>
+              <Input
+                name="startDate"
+                type="date"
+                value={formData.startDate}
+                onChange={handleInputChange}
+              />
+            </div>
+
+            {/* End Date */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                End Date
+              </label>
+              <Input
+                name="endDate"
+                type="date"
+                value={formData.endDate}
+                onChange={handleInputChange}
+                error={errors.endDate}
+                min={formData.startDate}
+              />
+            </div>
+          </div>
+
+          {/* Preview Selected Client */}
+          {formData.clientId && (
+            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Selected Client
+              </h4>
+              <p className="text-gray-900 dark:text-white font-medium">{getClientName(formData.clientId)}</p>
+            </div>
+          )}
+        </form>
+      </div>
+
+      {/* Sticky Form Actions */}
+      <div className="sticky bottom-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-6 mt-6 -mx-6 -mb-6 rounded-b-xl">
+        <div className="flex flex-col sm:flex-row justify-end gap-3">
           <Button
             type="button"
             variant="outline"
             onClick={onClose}
             disabled={loading}
+            className="w-full sm:w-auto"
           >
             Cancel
           </Button>
@@ -326,11 +331,13 @@ const getClientName = (clientId) => {
             type="submit"
             loading={loading}
             disabled={loading}
+            onClick={handleSubmit}
+            className="w-full sm:w-auto"
           >
             {project ? 'Update Project' : 'Create Project'}
           </Button>
         </div>
-      </form>
+      </div>
     </Modal>
   );
 };
