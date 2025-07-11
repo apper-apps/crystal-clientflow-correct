@@ -75,16 +75,7 @@ const Clients = () => {
 
   if (error) {
     return <Error message={error} onRetry={loadClients} />;
-  }
-
-if (clients.length === 0) {
-    return (
-      <Empty
-        title="No Clients Yet"
-        description="Start building your client base by adding your first client"
-        icon="Users"
-      />
-    );
+return <Error message={error} onRetry={loadClients} />;
   }
 
   return (
@@ -152,133 +143,139 @@ if (clients.length === 0) {
         Showing {filteredClients.length} of {clients.length} clients
       </motion.div>
 
-      {/* Clients Grid */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
-        {filteredClients.map((client, index) => (
-          <motion.div
-            key={client.Id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
->
-            <div
-              onClick={() => handleClientClick(client.Id)}
-              className="cursor-pointer"
+{/* Clients Grid */}
+      {filteredClients.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {filteredClients.map((client, index) => (
+            <motion.div
+              key={client.Id}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              <Card hover className="p-6 h-full transition-all duration-200 hover:shadow-lg">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
-                      {client.name.charAt(0).toUpperCase()}
+              <div
+                onClick={() => handleClientClick(client.Id)}
+                className="cursor-pointer"
+              >
+                <Card hover className="p-6 h-full transition-all duration-200 hover:shadow-lg">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
+                        {client.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+                          {client.name}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                          {client.company}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 dark:text-white truncate">
-                        {client.name}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                        {client.company}
-                      </p>
+                    
+                    <Badge variant={client.status === "active" ? "success" : "secondary"}>
+                      {client.status}
+                    </Badge>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      <ApperIcon name="Mail" size={14} />
+                      <span className="truncate">{client.email}</span>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      <ApperIcon name="Calendar" size={14} />
+                      <span>Client since {new Date(client.createdAt || client.CreatedOn).toLocaleDateString()}</span>
+                    </div>
+                    {/* Project Statistics */}
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      <ApperIcon name="FolderOpen" size={14} />
+                      <span>
+                        {(() => {
+                          const stats = calculateProjectStats(client.Id);
+                          return stats.totalProjects === 0 
+                            ? "No projects" 
+                            : `${stats.activeProjects} active, ${stats.totalProjects} total`;
+                        })()}
+                      </span>
                     </div>
                   </div>
                   
-                  <Badge variant={client.status === "active" ? "success" : "secondary"}>
-                    {client.status}
-                  </Badge>
-                </div>
-                
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <ApperIcon name="Mail" size={14} />
-                    <span className="truncate">{client.email}</span>
-                  </div>
-                  
-<div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <ApperIcon name="Calendar" size={14} />
-                    <span>Client since {new Date(client.createdAt || client.CreatedOn).toLocaleDateString()}</span>
-                  </div>
-                  {/* Project Statistics */}
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <ApperIcon name="FolderOpen" size={14} />
-                    <span>
-                      {(() => {
-                        const stats = calculateProjectStats(client.Id);
-                        return stats.totalProjects === 0 
-                          ? "No projects" 
-                          : `${stats.activeProjects} active, ${stats.totalProjects} total`;
-                      })()}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <Button
-                    variant="outline" 
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.location.href = `mailto:${client.email}`;
-                    }}
-                  >
-                    <ApperIcon name="MessageSquare" size={14} className="mr-2" />
-                    Contact
-</Button>
-                  
-                  <div className="flex items-center gap-2">
-                    {(() => {
-                      const stats = calculateProjectStats(client.Id);
-                      return stats.totalProjects > 0 && (
-                        <div className="flex items-center gap-1 text-xs">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span className="text-gray-600 dark:text-gray-400">
-                            {stats.activeProjects} active
-                          </span>
-                        </div>
-                      );
-                    })()}
-                    <Button 
-                      variant="ghost" 
+                  <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <Button
+                      variant="outline" 
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigate(`/clients/${client.Id}`);
+                        window.location.href = `mailto:${client.email}`;
                       }}
                     >
-                      <ApperIcon name="Eye" size={14} />
+                      <ApperIcon name="MessageSquare" size={14} className="mr-2" />
+                      Contact
                     </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <ApperIcon name="MoreHorizontal" size={16} />
-                    </Button>
+                    
+                    <div className="flex items-center gap-2">
+                      {(() => {
+                        const stats = calculateProjectStats(client.Id);
+                        return stats.totalProjects > 0 && (
+                          <div className="flex items-center gap-1 text-xs">
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span className="text-gray-600 dark:text-gray-400">
+                              {stats.activeProjects} active
+                            </span>
+                          </div>
+                        );
+                      })()}
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/clients/${client.Id}`);
+                        }}
+                      >
+                        <ApperIcon name="Eye" size={14} />
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ApperIcon name="MoreHorizontal" size={16} />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </Card>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+                </Card>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
 
-      {filteredClients.length === 0 && searchTerm && (
+{filteredClients.length === 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
           <Empty
-            title="No Clients Found"
-            description={`No clients match "${searchTerm}". Try adjusting your search.`}
-            icon="Search"
-            actionLabel="Clear Search"
-            onAction={() => setSearchTerm("")}
+            title={clients.length === 0 ? "No Clients Yet" : "No Clients Found"}
+            description={
+              clients.length === 0 
+                ? "Start building your client base by adding your first client"
+                : `No clients match "${searchTerm}". Try adjusting your search.`
+            }
+            icon={clients.length === 0 ? "Users" : "Search"}
+            actionLabel={clients.length === 0 ? null : "Clear Search"}
+            onAction={clients.length === 0 ? null : () => setSearchTerm("")}
           />
-</motion.div>
+        </motion.div>
       )}
 
       {/* Client Modal */}
